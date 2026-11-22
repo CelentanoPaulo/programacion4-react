@@ -6,7 +6,7 @@ interface User {
   name: string;
 }
 
-// práctica 1: lo que devuelve GET /user/{id}
+// lo que devuelve GET /user/{id}
 interface UserDetail extends User {
   email: string;
   age: number;
@@ -18,22 +18,22 @@ export function UserList({ token }: { token: string }) {
   //bajo capot
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [me, setMe] = useState<UserDetail | null>(null); // paso 6 (práctica 4: ahora con roles)
-  const [selectedId, setSelectedId] = useState<number | null>(null); // práctica 1
-  const [detail, setDetail] = useState<UserDetail | null>(null); // práctica 1
-  const [loading, setLoading] = useState(true); // práctica 2
-  const [busqueda, setBusqueda] = useState(""); // práctica 3: lo que escribo en el input
-  const [filtro, setFiltro] = useState(""); // práctica 3: lo que se busca de verdad
-  // práctica 5: los campos del formulario de alta
+  const [me, setMe] = useState<UserDetail | null>(null); //práctica 4: ahora con roles
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [detail, setDetail] = useState<UserDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [busqueda, setBusqueda] = useState(""); // lo que escribo en el input
+  const [filtro, setFiltro] = useState(""); // lo que se busca de verdad
+  // campos del formulario de alta
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pais, setPais] = useState("1");
-  const [mensaje, setMensaje] = useState<string | null>(null); // práctica 5: errores del alta
+  const [mensaje, setMensaje] = useState<string | null>(null); // errores del alta
 
   useEffect(() => {
-    // práctica 3: si hay algo buscado uso el endpoint de búsqueda, si no la lista completa
+    // si hay algo buscado uso el endpoint de búsqueda, si no la lista completa
     let url = `${import.meta.env.VITE_API_URL}/user`;
     if (filtro !== "") {
       url = `${import.meta.env.VITE_API_URL}/user/search/${encodeURIComponent(filtro)}`;
@@ -42,16 +42,16 @@ export function UserList({ token }: { token: string }) {
       headers: { Authorization: `Bearer ${token}` },
     }).then(async (respuesta) => {
       const data = await respuesta.json();
-      setLoading(false); // práctica 2: ya llegó la respuesta, buena o mala
+      setLoading(false); // ya llegó la respuesta, buena o mala
       if (!respuesta.ok) {
-        setError(data.detail); // 401, 403…: viene un objeto { detail }
+        setError(data.detail); // 401, 403… viene un objeto { detail }
         return;
       }
-      setUsers(data); // 200: recién acá es una lista
+      setUsers(data); // 200 recién acá es una lista
     });
   }, [token, filtro]);
 
-  // paso 6: primero pregunto quién soy y después pido mis datos
+  // primero pregunto quién soy y después pido mis datos
   useEffect(() => {
     const headers = { Authorization: `Bearer ${token}` };
     const api = import.meta.env.VITE_API_URL;
@@ -62,7 +62,7 @@ export function UserList({ token }: { token: string }) {
       .then(setMe);
   }, [token]);
 
-  // práctica 1: cada vez que cambia el id elegido, pido el detalle
+  // cada vez que cambia el id elegido, pido el detalle
   useEffect(() => {
     if (selectedId === null) return;
     fetch(`${import.meta.env.VITE_API_URL}/user/${selectedId}`, {
@@ -77,7 +77,7 @@ export function UserList({ token }: { token: string }) {
     });
   }, [selectedId, token]);
 
-  // práctica 3
+
   function buscar() {
     setLoading(true);
     setError(null);
@@ -91,7 +91,7 @@ export function UserList({ token }: { token: string }) {
     setFiltro("");
   }
 
-  // práctica 5: creo el usuario con POST /user
+  // creo el usuario con POST /user
   async function crearUsuario(evento: SubmitEvent) {
     evento.preventDefault();
     setMensaje(null);
@@ -103,7 +103,7 @@ export function UserList({ token }: { token: string }) {
       },
       body: JSON.stringify({
         name: nombre,
-        age: Number(edad), // tiene que viajar como número
+        age: Number(edad), // obligo a que sea un numero.
         email,
         password,
         country_id: Number(pais),
@@ -121,7 +121,7 @@ export function UserList({ token }: { token: string }) {
   //carroceria
   return (
     <>
-      {/* práctica 4: muestro mis roles separados por coma */}
+      {/*muestro mis roles separados por coma */}
       <h1>
         Hola, {me?.name} ({me?.roles?.map((rol) => rol.name).join(", ")})
       </h1>
@@ -169,7 +169,7 @@ export function UserList({ token }: { token: string }) {
       </form>
       {mensaje && <p>{mensaje}</p>}
 
-      {/* práctica 2: mientras carga muestro "Cargando...", si hay error muestro el detail y si no, la lista */}
+      {/*mientras carga muestro "Cargando...", si hay error muestro el detail y si no, la lista */}
       {loading ? (
         <p>Cargando...</p>
       ) : error ? (

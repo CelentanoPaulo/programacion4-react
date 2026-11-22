@@ -7,7 +7,7 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  // paso 7: el token arranca con lo que haya guardado en localStorage
+  //el token arranca con lo que haya guardado en localStorage
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   async function handleSubmit(evento: SubmitEvent) {
@@ -23,18 +23,18 @@ export default function App() {
       setError(data.detail);
       return;
     }
-    // paso 7: guardo el token para que no se pierda al recargar
+    // guardo el token para que no se pierda al recargar
     localStorage.setItem("token", data.token);
     setToken(data.token);
   }
 
-  // paso 7: cierro la sesión
+  // cierro la sesión
   function logout() {
     localStorage.removeItem("token");
     setToken(null);
   }
 
-  // práctica 8: UserList me avisa con esta función cuando la API responde 401
+  // UserList me avisa con esta función cuando la API responde 401
   function sesionVencida() {
     logout();
     setError("Tu sesión venció");

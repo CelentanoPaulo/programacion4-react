@@ -5,7 +5,7 @@ interface User {
   name: string;
 }
 
-// práctica 1: lo que devuelve GET /user/{id}
+// lo que devuelve GET /user/{id}
 interface UserDetail extends User {
   email: string;
   age: number;
@@ -27,16 +27,16 @@ export function UserList({ token }: { token: string }) {
       headers: { Authorization: `Bearer ${token}` },
     }).then(async (respuesta) => {
       const data = await respuesta.json();
-      setLoading(false); // práctica 2: ya llegó la respuesta, buena o mala
+      setLoading(false); // ya llegó la respuesta, buena o mala
       if (!respuesta.ok) {
-        setError(data.detail); // 401, 403…: viene un objeto { detail }
+        setError(data.detail); // 401, 403… viene un objeto { detail }
         return;
       }
-      setUsers(data); // 200: recién acá es una lista
+      setUsers(data); // 200 recién acá es una lista
     });
   }, [token]);
 
-  // paso 6: primero pregunto quién soy y después pido mis datos
+  // primero pregunto quién soy y después pido  datos
   useEffect(() => {
     const headers = { Authorization: `Bearer ${token}` };
     const api = import.meta.env.VITE_API_URL;
@@ -47,7 +47,7 @@ export function UserList({ token }: { token: string }) {
       .then(setMe);
   }, [token]);
 
-  // práctica 1: cada vez que cambia el id elegido, pido el detalle
+  // cada vez que cambia el id elegido, pido el detalle
   useEffect(() => {
     if (selectedId === null) return;
     fetch(`${import.meta.env.VITE_API_URL}/user/${selectedId}`, {
@@ -67,7 +67,7 @@ export function UserList({ token }: { token: string }) {
     <>
       <h1>Hola, {me?.name}</h1>
 
-      {/* práctica 2: mientras carga muestro "Cargando...", si hay error muestro el detail y si no, la lista */}
+      {/*  mientras carga muestro "Cargando...", si hay error muestro el detail y si no, la lista */}
       {loading ? (
         <p>Cargando...</p>
       ) : error ? (
